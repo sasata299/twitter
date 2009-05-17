@@ -9,7 +9,7 @@ require 'pp'
 require 'kconv'
 
 USER = 'carp_qr'
-PASS = 'higashideno1'
+PASS = 'xxxxxxx'
 
 def fileread
   if ( File.file? '/var/tmp/carp_qr' )

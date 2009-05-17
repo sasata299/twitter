@@ -9,7 +9,7 @@ require 'pp'
 require 'kconv'
 
 USER = 'carp_qr'
-PASS = 'xxxxxxx'
+PASS = 'higashideno1'
 
 def fileread
   if ( File.file? '/var/tmp/carp_qr' )
@@ -91,7 +91,7 @@ exit if result.empty? # 結果が取得できなかったら終了
 
 content = fileread
 client = Twitter::Client.new( :login => USER, :password => PASS )
-(result - content).each do |d|
+(result - content.to_a).each do |d|
   client.status(:post, "【#{d[:when]}】【#{team_list[0]} #{d[:score]} #{team_list[1]}】#{d[:who]}が#{d[:content]}")
 end
 

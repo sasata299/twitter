@@ -32,11 +32,11 @@ def which_win(team_list, score)
     team_list[0] => score.split(/-/)[0],
     team_list[1] => score.split(/-/)[1],
   }
-  if (team_list[0] == "広島" and hash[team_list[0]] > hash[team_list[1]]) or
-     (team_list[1] == "広島" and hash[team_list[1]] > hash[team_list[0]])
+  if (team_list[0] == "広島" and hash[team_list[0]].to_i > hash[team_list[1]].to_i) or
+     (team_list[1] == "広島" and hash[team_list[1]].to_i > hash[team_list[0]].to_i)
     return "勝ったよ!! .｡ﾟ+.(･∀･)ﾟ+.ﾟ"
-  elsif (team_list[0] == "広島" and hash[team_list[0]] < hash[team_list[1]]) or
-        (team_list[1] == "広島" and hash[team_list[1]] < hash[team_list[0]])
+  elsif (team_list[0] == "広島" and hash[team_list[0]].to_i < hash[team_list[1]].to_i) or
+        (team_list[1] == "広島" and hash[team_list[1]].to_i < hash[team_list[0]].to_i)
     return "ま、負けた・・ ｡･ﾟ･(ﾉД`)"
   else
     return "引き分け～"

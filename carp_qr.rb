@@ -1,15 +1,22 @@
 #!/usr/bin/ruby
 
 require 'rubygems'
-gem 'twitter4r'
-require 'twitter'
+#gem 'twitter4r'
+#require 'twitter'
 require 'mechanize'
 require 'hpricot'
-require 'pp'
 require 'kconv'
+require 'oauth'
+require 'json/pure'
+require 'pp'
 
-USER = 'carp_qr'
-PASS = 'xxxxxxx'
+CONSUMER_KEY        = 'SECRET'
+CONSUMER_SECRET     = 'SECRET'
+ACCESS_TOKEN        = 'SECRET'
+ACCESS_TOKEN_SECRET = 'SECRET'
+
+#USER = 'YOUR ID'
+#PASS = 'YOUR PASSWORD'
 
 def fileread
   if ( File.file? '/var/tmp/carp_qr' )
@@ -89,10 +96,25 @@ result = []
 end
 exit if result.empty? # 結果が取得できなかったら終了
 
+consumer = OAuth::Consumer.new(
+  CONSUMER_KEY,
+  CONSUMER_SECRET,
+  :site => 'http://twitter.com'
+)
+access_token = OAuth::AccessToken.new(
+  consumer,
+  ACCESS_TOKEN,
+  ACCESS_TOKEN_SECRET
+)
+
 content = fileread
-client = Twitter::Client.new( :login => USER, :password => PASS )
+#client = Twitter::Client.new( :login => USER, :password => PASS )
 (result - content.to_a).each do |d|
-  client.status(:post, "【#{d[:when]}】【#{team_list[0]} #{d[:score]} #{team_list[1]}】#{d[:who]}が#{d[:content]}")
+  #client.status(:post, "【#{d[:when]}】【#{team_list[0]} #{d[:score]} #{team_list[1]}】#{d[:who]}が#{d[:content]}")
+  access_token.post(
+    'http://twitter.com/statuses/update.json',
+    'status' => "【#{d[:when]}】【#{team_list[0]} #{d[:score]} #{team_list[1]}】#{d[:who]}が#{d[:content]}"
+  )
 end
 
 store_result(result)
@@ -100,7 +122,11 @@ store_result(result)
 if ( today == get_game_date(doc) )
   unless ( (doc/"span.pitcher-color").empty? )
     win = which_win(team_list, result[-1][:score])
-    client.status(:post, "【試合終了】【#{team_list[0]} #{result[-1][:score]} #{team_list[1]}】#{win}")
+    #client.status(:post, "【試合終了】【#{team_list[0]} #{result[-1][:score]} #{team_list[1]}】#{win}")
+    access_token.post(
+      'http://twitter.com/statuses/update.json',
+      'status' => "【試合終了】【#{team_list[0]} #{result[-1][:score]} #{team_list[1]}】#{win}"
+    )
     record_f(today)
   end
 end
